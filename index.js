@@ -1,11 +1,19 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const qrRouter = require('./routers/qrRouter');
+const path = require('path');
+
 const app = express();
 
-app.get('/', (req, res) => {
-    res.send('¡Hola Mundo!');
-});
+app.use(bodyParser.json());
 
-const PORT = process.env.PORT || 3000;
+// Hacer que la carpeta storage sea accesible públicamente
+app.use('/storage', express.static(path.join(__dirname, 'storage')));
+
+app.use('/api', qrRouter);
+
+const PORT = process.env.PORT || 3001;
+
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en el puerto ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
