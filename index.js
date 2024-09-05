@@ -1,15 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const geolocationRouter = require('./routers/geolocationRouter');
 const qrRouter = require('./routers/qrRouter');
-const path = require('path');
 
 const app = express();
-
 app.use(bodyParser.json());
 
-// Hacer que la carpeta storage sea accesible públicamente
-app.use('/storage', express.static(path.join(__dirname, 'storage')));
-
+app.use('/api', geolocationRouter);
 app.use('/api', qrRouter);
 
 const PORT = process.env.PORT || 3001;
