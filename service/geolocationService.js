@@ -2,7 +2,7 @@ const IPGeolocationAPI = require('ip-geolocation-api-javascript-sdk/IPGeolocatio
 const GeolocationParams = require('ip-geolocation-api-javascript-sdk/GeolocationParams');
 
 // Inicializa la API con tu API Key
-const ipgeolocationApi = new IPGeolocationAPI('026727a2f0694efc8c66fdafdf780542', false); // Reemplaza con tu API Key
+const ipgeolocationApi = new IPGeolocationAPI('', false); // Reemplaza con tu API Key
 
 // Función para obtener geolocalización
 const getGeolocationByIP = async (ip) => {
