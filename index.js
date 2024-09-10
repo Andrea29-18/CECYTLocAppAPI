@@ -1,13 +1,18 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const geolocationRouter = require('./routers/geolocationRouter');
-const qrRouter = require('./routers/qrRouter');
 
 const app = express();
-app.use(bodyParser.json());
 
-app.use('/api', geolocationRouter);
+app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+const qrRouter = require('./routers/qrRouter');
+const locationRoutes = require('./routers/locationRoutes');
+
 app.use('/api', qrRouter);
+app.use('/api', locationRoutes);
+
 
 const PORT = process.env.PORT || 3001;
 
