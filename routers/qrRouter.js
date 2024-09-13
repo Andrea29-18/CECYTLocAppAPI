@@ -1,8 +1,8 @@
 const express = require('express');
-const qrController = require('../controller/qrController');
-
+const { qrScanned } = require('../controller/qrController');
 const router = express.Router();
 
-router.post('/generate-qr', qrController.generateQR);
+// Ruta para manejar el escaneo del código QR
+router.post('/qr-scanned', qrScanned);
 
 module.exports = router;

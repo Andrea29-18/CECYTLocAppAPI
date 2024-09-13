@@ -1,21 +1,14 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-
 const app = express();
+const qrRoutes = require('./routers/qrRouter');
 
-app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+const port = 3000;
 
-const qrRouter = require('./routers/qrRouter');
-const locationRoutes = require('./routers/locationRoutes');
+app.use(express.json()); 
 
-app.use('/api', qrRouter);
-app.use('/api', locationRoutes);
+// Usar las rutas de QR
+app.use('/api', qrRoutes);
 
-
-const PORT = process.env.PORT || 3001;
-
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+app.listen(port, () => {
+    console.log(`Servidor corriendo en http://localhost:${port}`);
 });

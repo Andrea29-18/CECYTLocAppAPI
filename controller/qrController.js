@@ -1,16 +1,26 @@
-const qrService = require('../service/qrService');
+const { sendSMS } = require('../service/twilioService');
 
-const generateQR = async (req, res) => {
-    const { text } = req.body;
+// Controlador para manejar el escaneo del QR
+const qrScanned = async (req, res) => {
+    const { phoneNumber } = req.body;
+
+    if (!phoneNumber) {
+        return res.status(400).json({ error: 'Número de teléfono no proporcionado' });
+    }
 
     try {
-        const filePath = await qrService.generateQR(text);
-        res.status(200).json({ message: 'QR generado exitosamente', filePath });
+        // Envía un mensaje SMS con Twilio
+        const message = await sendSMS(phoneNumber, 'Enterado. Gracias por escanear el QR.');
+        console.log(`Mensaje enviado con SID: ${message.sid}`);
+
+        // Respuesta exitosa
+        return res.json({ message: 'Mensaje enviado con éxito' });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Error enviando el mensaje:', error);
+        return res.status(500).json({ error: 'No se pudo enviar el mensaje' });
     }
 };
 
 module.exports = {
-    generateQR,
+    qrScanned
 };
