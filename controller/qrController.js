@@ -10,7 +10,7 @@ const qrScanned = async (req, res) => {
 
     try {
         // Envía un mensaje SMS con Twilio
-        const message = await sendSMS(phoneNumber, 'Enterado. Gracias por escanear el QR.');
+        const message = await sendSMS(phoneNumber, 'Ya se puede enviar mensajes');
         console.log(`Mensaje enviado con SID: ${message.sid}`);
 
         // Respuesta exitosa

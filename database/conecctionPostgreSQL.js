@@ -4,6 +4,6 @@ export const pool = new pg.Pool({
     host: 'localhost',
     port: 5432,
     database:'db_Cecytev',
-    user:'tu usuari',
-    password:'tu contraseña'
+    user:'ale',
+    password:'Ale123'
 });
