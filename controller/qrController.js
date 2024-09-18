@@ -1,26 +1,44 @@
-const { sendSMS } = require('../service/twilioService');
+const { createQR, checkQR, markAsUsed } = require('../service/qrService');
+const { sendMessage } = require('../service/ultraMsgService');
+const QRCode = require('qrcode');
 
-// Controlador para manejar el escaneo del QR
-const qrScanned = async (req, res) => {
-    const { phoneNumber } = req.body;
+// Generar un QR dinámicamente y agregarlo al stock
+const generateQR = (req, res) => {
+    const qrData = createQR();  // Usar createQR para generar el QR y agregarlo al stock
 
-    if (!phoneNumber) {
-        return res.status(400).json({ error: 'Número de teléfono no proporcionado' });
-    }
+    QRCode.toDataURL(qrData.url, (err, url) => {
+        if (err) {
+            res.status(500).send('Error al generar el código QR');
+        } else {
+            res.send(`<img src="${url}" alt="QR Code">`);
+        }
+    });
+};
 
-    try {
-        // Envía un mensaje SMS con Twilio
-        const message = await sendSMS(phoneNumber, 'Ya se puede enviar mensajes');
-        console.log(`Mensaje enviado con SID: ${message.sid}`);
+// Escanear el QR
+const scanQR = (req, res) => {
+    const { qrId } = req.params;
+    const result = checkQR(qrId);
 
-        // Respuesta exitosa
-        return res.json({ message: 'Mensaje enviado con éxito' });
-    } catch (error) {
-        console.error('Error enviando el mensaje:', error);
-        return res.status(500).json({ error: 'No se pudo enviar el mensaje' });
+    if (result === 'used') {
+        return res.status(400).send('Este QR ya ha sido utilizado.');
+    } else if (result === 'invalid') {
+        return res.status(404).send('QR inválido.');
+    } else {
+        // Enviar el mensaje "Ya llegué" cuando el QR es válido
+        sendMessage("+as", "El Alumno: Jesus Xolo, ha ingresado al platel de catemaco")
+            .then(() => {
+                markAsUsed(qrId);  // Marcar el QR como usado
+                res.send('Mensaje enviado: Ya llegué.');
+            })
+            .catch((err) => {
+                console.error('Error al enviar el mensaje:', err);
+                res.status(500).send('Error al enviar el mensaje');
+            });
     }
 };
 
 module.exports = {
-    qrScanned
+    generateQR,
+    scanQR
 };

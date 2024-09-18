@@ -7,7 +7,7 @@ const port = 3000;
 app.use(express.json()); 
 
 // Usar las rutas de QR
-app.use('/api', qrRoutes);
+app.use('/qr', qrRoutes);  // Esto es crucial
 
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);
